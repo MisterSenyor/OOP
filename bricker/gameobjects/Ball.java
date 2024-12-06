@@ -1,20 +1,36 @@
 package bricker.gameobjects;
 import danogl.*;
 import danogl.collisions.*;
+import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 public class Ball extends GameObject {
-    public Ball(Vector2 topLeft, Vector2 dimensions, Renderable renderable) {
-        super(topLeft, dimensions, renderable);
+    private Sound collisionSound;
+
+    /**
+     * Construct a new GameObject instance.
+     *
+     * @param topLeftCorner Position of the object, in window coordinates (pixels).
+     *                      Note that (0,0) is the top-left corner of the window.
+     * @param dimensions    Width and height in window coordinates.
+     * @param renderable    The renderable representing the object. Can be null, in which case
+     *                      the GameObject will not be rendered.
+     */
+    public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound) {
+        super(topLeftCorner, dimensions, renderable);
+        this.collisionSound = collisionSound;
     }
+
 
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         Vector2 newVel = getVelocity().flipped(collision.getNormal());
         setVelocity(newVel);
+        collisionSound.play();
     }
+
     public int getCollisionCounter() {
         return 0;
     }
