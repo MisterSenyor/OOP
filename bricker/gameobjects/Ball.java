@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class Ball extends GameObject {
     static final Vector2 DEFAULT_SIZE = new Vector2(50, 50);
-    static final float BALL_SPEED = 400f;
+    static final float BALL_SPEED = 300f;
     private Sound collisionSound;
     int collisionCounter;
 
