@@ -10,20 +10,23 @@ import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
-import java.util.Random;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class BrickerGameManager extends GameManager {
-    static final int BRICKS_ROW_DEFAULT = 7;
-    static final int BRICKS_COLUMN_DEFAULT = 8;
-    static final int BRICKS_DISTANCE = 1;
-    static final float BRICK_HEIGHT = 15;
-    static final int WALL_WIDTH = 10;
+    private static final int BRICKS_ROW_DEFAULT = 7;
+    private static final int BRICKS_COLUMN_DEFAULT = 8;
+    private static final int BRICKS_DISTANCE = 1;
+    private static final float BRICK_HEIGHT = 15;
+    static final int WALL_WIDTH = 20;
     private Ball ball;
     private Brick[] bricks;
     private Vector2 windowDimensions;
     private WindowController windowController;
     private LifeCounter lifeCounter;
-    private Puck[] pucks;
+    private LinkedList<Puck> puckList;
+    private Renderable puckImage;
+    private Sound puckSound;
 
     public BrickerGameManager(String name, Vector2 pos) {super(name, pos);}
 
@@ -77,8 +80,7 @@ public class BrickerGameManager extends GameManager {
             for (int j = 0; j < numOfCols; j++) {
                 bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) * j + BRICKS_DISTANCE,
                         (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
-                        BRICK_HEIGHT), brickImage, new BasicCollisionStrategy(this,
-                        i*numOfCols + j));
+                        BRICK_HEIGHT), brickImage, new BasicCollisionStrategy(this));
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
@@ -93,21 +95,15 @@ public class BrickerGameManager extends GameManager {
     }
 
     private void createPucks(ImageReader imageReader, SoundReader soundReader) {
-        this.pucks = new Puck[0];
+        this.puckList = new LinkedList<Puck>();
+        this.puckImage = imageReader.readImage("assets/mockBall.png", true);
+        this.puckSound = soundReader.readSound("assets/blop.wav");
     }
 
-    private void addPucks(int numOfPucks, ImageReader imageReader, SoundReader soundReader) {
-        Renderable puckImage = imageReader.readImage("assets/mockBall.png", true);
-        Sound collisionSound = soundReader.readSound("assets/blop.wav");
-        Puck[] new_pucks = new Puck[numOfPucks];
+    public void addPucks(int numOfPucks, Vector2 location) {
         for (int i = 0; i < numOfPucks; i++) {
-            if (i < pucks.length) {
-                new_pucks[i] = pucks[i];
-            }
-            else {
-                new_pucks[i] = new Puck(new Vector2(0, 0), puckImage, collisionSound);
-                gameObjects().addGameObject(new_pucks[i]);
-            }
+            puckList.add(new Puck(location, puckImage, puckSound));
+            gameObjects().addGameObject(puckList.getLast());
         }
     }
 
@@ -115,6 +111,7 @@ public class BrickerGameManager extends GameManager {
     public void update(float deltaTime) {
         super.update(deltaTime);
         checkForEndgame();
+        checkPucks();
     }
 
     private void checkForEndgame() {
@@ -128,8 +125,19 @@ public class BrickerGameManager extends GameManager {
         }
     }
 
-    public void deleteBrick(int brickIndex) {
-        gameObjects().removeGameObject(bricks[brickIndex], Layer.STATIC_OBJECTS);
+    private void checkPucks() {
+        Iterator<Puck> iterator = puckList.iterator();
+        while (iterator.hasNext()) {
+            Puck puck = iterator.next();
+            if (puck.getCenter().y() > windowDimensions.y()) {
+                gameObjects().addGameObject(puck);
+                iterator.remove(); // Safely removes the current element
+            }
+        }
+    }
+
+    public void deleteStaticObject(GameObject object) {
+        gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
     }
 
 

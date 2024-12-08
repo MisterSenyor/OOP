@@ -34,13 +34,4 @@ public class Puck extends Ball{
     public Puck(Vector2 topLeftCorner, Renderable renderable, Sound collisionSound) {
         this(topLeftCorner, DEFAULT_SIZE.mult(SIZE_FACTOR), renderable, collisionSound);
     }
-
-    @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-        if (this.getCenter().y() < 0) {
-
-        }
-    }
-
 }
