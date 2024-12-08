@@ -7,7 +7,9 @@ import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.components.CoordinateSpace;
 import danogl.gui.*;
+import danogl.gui.rendering.ImageRenderable;
 import danogl.gui.rendering.Renderable;
+import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
 
 import java.util.Iterator;
@@ -27,6 +29,9 @@ public class BrickerGameManager extends GameManager {
     private LinkedList<Puck> puckList;
     private Renderable puckImage;
     private Sound puckSound;
+    private final int NUM_LIVES = 3, MAX_LIVES = 3;
+    private Renderable ballImage;
+    private Sound collisionSound;
 
     public BrickerGameManager(String name, Vector2 pos) {super(name, pos);}
 
@@ -44,16 +49,15 @@ public class BrickerGameManager extends GameManager {
         gameObjects().addGameObject(bg, Layer.BACKGROUND);
 
         // Create ball
-        createBall(imageReader, soundReader);
+        ballImage = imageReader.readImage("assets/ball.png", true);
+        collisionSound = soundReader.readSound("assets/blop.wav");
+        createBall();
 
         //create Pucks
         createPucks(imageReader, soundReader);
 
         // create brick
         createBricks(imageReader, 7, 8);
-
-        //create LifeCounter
-        lifeCounter=new LifeCounter(3, null, null);
 
         // Create paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
@@ -69,6 +73,9 @@ public class BrickerGameManager extends GameManager {
         gameObjects().addGameObject(wall, Layer.STATIC_OBJECTS);
         wall = new GameObject(new Vector2(windowDimensions.x(), 0), new Vector2(WALL_WIDTH, windowDimensions.y()), null);
         gameObjects().addGameObject(wall, Layer.STATIC_OBJECTS);
+
+        // Create lives
+        createLives(imageReader);
 
     }
 
@@ -86,9 +93,25 @@ public class BrickerGameManager extends GameManager {
         }
     }
 
-    private void createBall(ImageReader imageReader, SoundReader soundReader) {
-        Renderable ballImage = imageReader.readImage("assets/ball.png", true);
-        Sound collisionSound = soundReader.readSound("assets/blop.wav");
+    private void createLives(ImageReader imageReader) {
+        //create LifeCounter
+        Renderable heartImage = imageReader.readImage("assets/heart.png", true);
+        Renderable numericalCountRenderable = new TextRenderable(String.valueOf(NUM_LIVES));
+        GameObject numericalCount = new GameObject(new Vector2(WALL_WIDTH, WALL_WIDTH),
+                new Vector2(WALL_WIDTH, WALL_WIDTH * 2), numericalCountRenderable);
+        GameObject hearts[] = new GameObject[NUM_LIVES];
+        for (int i = 0; i < MAX_LIVES; i++) {
+            // TODO const factor
+             hearts[i] = new GameObject(new Vector2(WALL_WIDTH + i * ((ImageRenderable)
+                    heartImage).width() * 0.2f, windowDimensions.y() - WALL_WIDTH * 2), new Vector2(((ImageRenderable)
+                     heartImage).width(), ((ImageRenderable) heartImage).height()).mult(0.2f), heartImage);
+            gameObjects().addGameObject(hearts[i], Layer.BACKGROUND);
+        }
+        gameObjects().addGameObject(numericalCount, Layer.STATIC_OBJECTS);
+        lifeCounter=new LifeCounter(NUM_LIVES, MAX_LIVES, hearts, numericalCount, this);
+    }
+
+    private void createBall() {
         ball = new Ball(Vector2.ZERO, ballImage, collisionSound);
         ball.setCenter(this.windowDimensions.mult(0.5f));
         gameObjects().addGameObject(ball);
@@ -117,6 +140,12 @@ public class BrickerGameManager extends GameManager {
     private void checkForEndgame() {
         double ballHeight = this.ball.getCenter().y();
         if (ballHeight > windowDimensions.y()) {
+            if (!this.lifeCounter.loss()) {
+                gameObjects().removeGameObject(ball);
+                createBall();
+                gameObjects().addGameObject(ball);
+                return;
+            }
             String prompt = "You lost! Play again?";
             if(windowController.openYesNoDialog(prompt))
                 windowController.resetGame();
@@ -138,6 +167,10 @@ public class BrickerGameManager extends GameManager {
 
     public void deleteStaticObject(GameObject object) {
         gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
+    }
+
+    public void deleteBackgroundObject(GameObject object) {
+        gameObjects().removeGameObject(object, Layer.BACKGROUND);
     }
 
 
