@@ -12,7 +12,6 @@ public class BasicCollisionStrategy implements CollisionStrategy {
     }
 
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-        System.out.println("this " + thisObj.getTopLeftCorner() + " other " + otherObj.getTopLeftCorner());
         brickerGameManager.deleteStaticObject(thisObj);
     }
 }

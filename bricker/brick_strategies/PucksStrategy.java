@@ -5,12 +5,8 @@ import danogl.GameObject;
 import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
 
-public class pucksStrategy extends BasicCollisionStrategy {
-    private Renderable puckImage;
-    private Sound puckCollisionSound;
-
-
-    public pucksStrategy(BrickerGameManager brickerGameManager) {
+public class PucksStrategy extends BasicCollisionStrategy {
+    public PucksStrategy(BrickerGameManager brickerGameManager) {
         super(brickerGameManager);
     }
 

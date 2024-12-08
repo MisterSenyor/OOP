@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 
 public class Paddle extends GameObject {
     private static final float MOVEMENT_SPEED = 30f;
+    static final Vector2 DEFAULT_SIZE = new Vector2(100, 15);
     private UserInputListener inputListener;
     private Vector2 windowDimensions;
     /**
@@ -25,6 +26,11 @@ public class Paddle extends GameObject {
         super(topLeftCorner, dimensions, renderable);
         this.inputListener = inputListener;
         this.windowDimensions = windowDimensions;
+    }
+
+    public Paddle(Vector2 topLeftCorner, Renderable renderable, UserInputListener inputListener,
+                  Vector2 windowDimensions) {
+        this(topLeftCorner, DEFAULT_SIZE, renderable, inputListener, windowDimensions);
     }
 
     @Override
