@@ -1,10 +1,7 @@
 package bricker.main;
 
 import bricker.brick_strategies.BasicCollisionStrategy;
-import bricker.gameobjects.Ball;
-import bricker.gameobjects.Brick;
-import bricker.gameobjects.LifeCounter;
-import bricker.gameobjects.Paddle;
+import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.Layer;
@@ -20,12 +17,13 @@ public class BrickerGameManager extends GameManager {
     static final int BRICKS_COLUMN_DEFAULT = 8;
     static final int BRICKS_DISTANCE = 1;
     static final float BRICK_HEIGHT = 15;
-    static final int WALL_WIDTH = 1;
+    static final int WALL_WIDTH = 10;
     private Ball ball;
     private Brick[] bricks;
     private Vector2 windowDimensions;
     private WindowController windowController;
     private LifeCounter lifeCounter;
+    private Puck[] pucks;
 
     public BrickerGameManager(String name, Vector2 pos) {super(name, pos);}
 
@@ -45,6 +43,9 @@ public class BrickerGameManager extends GameManager {
         // Create ball
         createBall(imageReader, soundReader);
 
+        //create Pucks
+        createPucks(imageReader, soundReader);
+
         // create brick
         createBricks(imageReader, 7, 8);
 
@@ -59,12 +60,12 @@ public class BrickerGameManager extends GameManager {
         gameObjects().addGameObject(paddle);
 
         // Create walls
-        GameObject wall = new GameObject(Vector2.ZERO, new Vector2(WALL_WIDTH, windowDimensions.y()), null);
-        gameObjects().addGameObject(wall);
-        wall = new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(), WALL_WIDTH), null);
-        gameObjects().addGameObject(wall);
-        wall = new GameObject(new Vector2(windowDimensions.x() - WALL_WIDTH, 0), new Vector2(WALL_WIDTH, windowDimensions.y()), null);
-        gameObjects().addGameObject(wall);
+        GameObject wall = new GameObject(new Vector2(-WALL_WIDTH, 0), new Vector2(WALL_WIDTH, windowDimensions.y()), null);
+        gameObjects().addGameObject(wall, Layer.STATIC_OBJECTS);
+        wall = new GameObject(new Vector2(0, -WALL_WIDTH), new Vector2(windowDimensions.x(), WALL_WIDTH), null);
+        gameObjects().addGameObject(wall, Layer.STATIC_OBJECTS);
+        wall = new GameObject(new Vector2(windowDimensions.x(), 0), new Vector2(WALL_WIDTH, windowDimensions.y()), null);
+        gameObjects().addGameObject(wall, Layer.STATIC_OBJECTS);
 
     }
 
@@ -78,7 +79,7 @@ public class BrickerGameManager extends GameManager {
                         (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
                         BRICK_HEIGHT), brickImage, new BasicCollisionStrategy(this,
                         i*numOfCols + j));
-                gameObjects().addGameObject(bricks[i*numOfCols + j]);
+                gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
     }
@@ -86,19 +87,28 @@ public class BrickerGameManager extends GameManager {
     private void createBall(ImageReader imageReader, SoundReader soundReader) {
         Renderable ballImage = imageReader.readImage("assets/ball.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop.wav");
-        ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
+        ball = new Ball(Vector2.ZERO, ballImage, collisionSound);
         ball.setCenter(this.windowDimensions.mult(0.5f));
         gameObjects().addGameObject(ball);
+    }
 
-        float ballVelX = 300f, ballVelY = 300f;
-        Random random = new Random();
-        if (random.nextBoolean()) {
-            ballVelY = -ballVelY;
+    private void createPucks(ImageReader imageReader, SoundReader soundReader) {
+        this.pucks = new Puck[0];
+    }
+
+    private void addPucks(int numOfPucks, ImageReader imageReader, SoundReader soundReader) {
+        Renderable puckImage = imageReader.readImage("assets/mockBall.png", true);
+        Sound collisionSound = soundReader.readSound("assets/blop.wav");
+        Puck[] new_pucks = new Puck[numOfPucks];
+        for (int i = 0; i < numOfPucks; i++) {
+            if (i < pucks.length) {
+                new_pucks[i] = pucks[i];
+            }
+            else {
+                new_pucks[i] = new Puck(new Vector2(0, 0), puckImage, collisionSound);
+                gameObjects().addGameObject(new_pucks[i]);
+            }
         }
-        if (random.nextBoolean()) {
-            ballVelX = -ballVelX;
-        }
-        ball.setVelocity(new Vector2(ballVelX, ballVelY));
     }
 
     @Override
@@ -119,7 +129,7 @@ public class BrickerGameManager extends GameManager {
     }
 
     public void deleteBrick(int brickIndex) {
-        gameObjects().removeGameObject(bricks[brickIndex]);
+        gameObjects().removeGameObject(bricks[brickIndex], Layer.STATIC_OBJECTS);
     }
 
 
