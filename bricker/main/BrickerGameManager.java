@@ -28,10 +28,14 @@ public class BrickerGameManager extends GameManager {
     private LifeCounter lifeCounter;
     private LinkedList<Puck> puckList;
     private Renderable puckImage;
+    private UserInputListener userInputListener;
     private Sound puckSound;
     private final int NUM_LIVES = 3, MAX_LIVES = 3;
     private Renderable ballImage;
     private Sound collisionSound;
+    private Renderable paddleImage;
+    private BonusPaddle bonusPaddle;
+    private boolean bonusPaddleExists;
 
     public BrickerGameManager(String name, Vector2 pos) {super(name, pos);}
 
@@ -39,9 +43,11 @@ public class BrickerGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader,
                                UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-
+        this.bonusPaddleExists = false;
         this.windowController = windowController;
         this.windowDimensions = windowController.getWindowDimensions();
+        this.userInputListener = inputListener;
+        this.paddleImage = imageReader.readImage("assets/paddle.png", true);
         // Create background
         Renderable bgImage = imageReader.readImage("assets/DARK_BG2_small.jpeg", false);
         GameObject bg = new GameObject(Vector2.ZERO, windowDimensions, bgImage);
@@ -59,9 +65,12 @@ public class BrickerGameManager extends GameManager {
         // create brick
         createBricks(imageReader, 7, 8);
 
+        //create LifeCounter
+        lifeCounter=new LifeCounter(3, null, null);
+
         // Create paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
-        GameObject paddle = new Paddle(Vector2.ZERO, new Vector2(100, 15), paddleImage, inputListener,
+        GameObject paddle = new Paddle(Vector2.ZERO, paddleImage, inputListener,
                 windowDimensions);
         paddle.setCenter(new Vector2(windowDimensions.x() / 2, windowDimensions.y() - 30));
         gameObjects().addGameObject(paddle);
@@ -87,7 +96,7 @@ public class BrickerGameManager extends GameManager {
             for (int j = 0; j < numOfCols; j++) {
                 bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) * j + BRICKS_DISTANCE,
                         (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
-                        BRICK_HEIGHT), brickImage, new BasicCollisionStrategy(this));
+                        BRICK_HEIGHT), brickImage, new anotherPaddleStrategy(this));
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
@@ -121,6 +130,14 @@ public class BrickerGameManager extends GameManager {
         this.puckList = new LinkedList<Puck>();
         this.puckImage = imageReader.readImage("assets/mockBall.png", true);
         this.puckSound = soundReader.readSound("assets/blop.wav");
+    }
+
+    public void createBonusPaddle() {
+        if (!this.bonusPaddleExists) {
+            this.bonusPaddle = new BonusPaddle(this.paddleImage, this.userInputListener, windowDimensions, this);
+            gameObjects().addGameObject(bonusPaddle);
+            bonusPaddleExists = true;
+        }
     }
 
     public void addPucks(int numOfPucks, Vector2 location) {
@@ -173,9 +190,16 @@ public class BrickerGameManager extends GameManager {
         gameObjects().removeGameObject(object, Layer.BACKGROUND);
     }
 
+    public void deleteBonusPaddle() {
+        gameObjects().removeGameObject(this.bonusPaddle);
+        bonusPaddleExists = false;
+    }
+
 
     public static void main(String[] args) {
         GameManager manager = new BrickerGameManager("Bricker", new Vector2(700, 500));
         manager.run();
     }
+
+
 }
