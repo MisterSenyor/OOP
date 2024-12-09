@@ -1,0 +1,20 @@
+tomer_zilb, idomi
+326063047, 215334251
+
+Essentially, we will split the breakdown into multiple segments, each one detailing a
+different architecture:
+First, we'll address the main BrickerGameManager class. This class is meant to run the
+entire game, and therefore we had it bridge between the multiple objects that it
+interacts with. This essentially means that the reason that we extended the APIs,
+as we did in many other classes, is to preserve the concept of encapsulation and
+allow the main class BrickerGameManager to define how they all interact with each
+other.
+Secondly, we will detail the proposed method for implementing Brick strategies.
+Obviously, the strategies provide a composition architecture that allows for a
+single brick class to implement multiple strategies. In great addition to the
+composition scheme, we've implemented the strategies as decorators, as to allow
+both easy addition of multiple strategies while maintaining encapsulation and
+simplicity, while also allowing the tracking of the amount of strategies already
+stacked (to block more than 3 on the same brick).
+This all comes together in the StrategyFactory - a factory object that handles
+the randomized generation of Strategies, stacking the decorators one atop another.
