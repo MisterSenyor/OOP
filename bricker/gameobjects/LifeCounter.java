@@ -8,7 +8,7 @@ import java.awt.*;
 
 /**
  * Class to handle the player's lives.
- * @author idomi
+ * @author Ido Minha
  */
 public class LifeCounter {
     /**
@@ -33,7 +33,8 @@ public class LifeCounter {
      * @param numericalPos - position of numericalCount
      * @param numericalSize - size of numericalCount
      */
-    public LifeCounter(int numOfLives,int maxLives, GameObject[] hearts, BrickerGameManager brickerGameManager, Vector2 numericalPos,
+    public LifeCounter(int numOfLives,int maxLives, GameObject[] hearts,
+                       BrickerGameManager brickerGameManager, Vector2 numericalPos,
                        Vector2 numericalSize) {
         this.numOfLives = numOfLives;
         this.hearts = hearts;

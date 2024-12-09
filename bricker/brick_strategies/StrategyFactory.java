@@ -1,12 +1,11 @@
 package bricker.brick_strategies;
-
-import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 
 import java.util.Random;
 
 /**
  * the factory of Strategies, used to make and choose strategies.
+ * @author Ido Minha
  */
 public class StrategyFactory {
     private static final int NUMBER_OF_STRATEGIES = 5;
@@ -53,7 +52,7 @@ public class StrategyFactory {
         //randomly chooses and implement the strategy
         Random random = new Random();
         int choice = random.nextInt(NUMBER_OF_STRATEGIES);
-        switch (TURBO_STRATEGY) {
+        switch (choice) {
             case DOUBLE_STRATEGY:
                 return randomlyDecorate(randomlyDecorate(strategy));
             case EXTRA_LIFE_STRATEGY:

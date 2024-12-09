@@ -3,8 +3,6 @@ package bricker.brick_strategies;
 import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
-import danogl.gui.Sound;
-import danogl.gui.rendering.Renderable;
 
 /**
  * the strategy that creates extra balls.
@@ -14,9 +12,9 @@ public class PucksStrategy implements CollisionStrategyDecorator {
     // the number of pucks we add
     private static final int PUCK_TO_ADD = 2;
     // strategy that used in addition to the extra pucks
-    private CollisionStrategy strategy;
+    private final CollisionStrategy strategy;
     // brick game manager used to handle creation and deletion of gam objects
-    private BrickerGameManager brickerGameManager;
+    private final BrickerGameManager brickerGameManager;
     public PucksStrategy(CollisionStrategy strategy, BrickerGameManager brickerGameManager) {
         this.strategy = strategy;
         this.brickerGameManager = brickerGameManager;

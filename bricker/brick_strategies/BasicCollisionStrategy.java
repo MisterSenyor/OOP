@@ -1,11 +1,10 @@
 package bricker.brick_strategies;
-import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 import danogl.*;
-import danogl.collisions.Layer;
 
 /**
  * the basic collision strategy, used to just delete the brick
+ * @author Tomer Zilberman
  */
 public class BasicCollisionStrategy implements CollisionStrategy {
     // brick manager used to delete the brick

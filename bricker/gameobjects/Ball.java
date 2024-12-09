@@ -10,7 +10,6 @@ import java.util.Random;
 /**
  * class that represents the ball in the bricker game
  * @author Tomer Zilberman
- *
  */
 public class Ball extends GameObject {
     //constants of the ball default size, speed and turbo speed factor
@@ -116,5 +115,4 @@ public class Ball extends GameObject {
         setVelocity(getVelocity().mult(1 / TURBO_MULTIPLIER));
         isInTurboMode = false;
     }
-
 }

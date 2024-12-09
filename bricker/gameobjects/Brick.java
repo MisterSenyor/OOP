@@ -23,7 +23,8 @@ public class Brick extends GameObject {
      *                      the GameObject will not be rendered.
      * @param collisionStrategy what to do when in collision
      */
-    public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, CollisionStrategy collisionStrategy) {
+    public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
+                 CollisionStrategy collisionStrategy) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionStrategy = collisionStrategy;
     }
