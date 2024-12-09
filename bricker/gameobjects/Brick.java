@@ -12,7 +12,7 @@ import danogl.util.Vector2;
  */
 public class Brick extends GameObject {
     private CollisionStrategy collisionStrategy;
-    private static int brickCounter = 0;
+    private boolean isDeleted = false;
     /**
      * Construct a new Brick instance.
      *
@@ -26,7 +26,6 @@ public class Brick extends GameObject {
     public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, CollisionStrategy collisionStrategy) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionStrategy = collisionStrategy;
-        brickCounter++;
     }
 
     /**
@@ -40,5 +39,13 @@ public class Brick extends GameObject {
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         collisionStrategy.onCollision(this, other);
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void deleteBrick() {
+        isDeleted = true;
     }
 }

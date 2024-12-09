@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 import danogl.gui.Sound;
@@ -28,7 +29,9 @@ public class PucksStrategy implements CollisionStrategyDecorator {
      */
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-        brickerGameManager.addPucks(PUCK_TO_ADD, thisObj.getCenter());
+        if (!((Brick) thisObj).isDeleted()) {
+            brickerGameManager.addPucks(PUCK_TO_ADD, thisObj.getCenter());
+        }
         strategy.onCollision(thisObj, otherObj);
     }
 

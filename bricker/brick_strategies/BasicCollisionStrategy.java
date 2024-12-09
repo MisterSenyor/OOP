@@ -25,7 +25,7 @@ public class BasicCollisionStrategy implements CollisionStrategy {
      * @param otherObj the other object in the collision
      */
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-        brickerGameManager.deleteStaticObject(thisObj);
+        brickerGameManager.deleteBrick(thisObj);
     }
 
     /**

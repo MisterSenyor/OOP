@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
@@ -30,7 +31,9 @@ public class ExtraLifeStrategy implements CollisionStrategyDecorator {
      */
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-        brickerGameManager.addExtraLife(thisObj.getCenter());
+        if (!((Brick) thisObj).isDeleted()) {
+            brickerGameManager.addExtraLife(thisObj.getCenter());
+        }
         strategy.onCollision(thisObj, otherObj);
     }
 

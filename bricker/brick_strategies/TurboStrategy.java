@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
@@ -30,7 +31,7 @@ public class TurboStrategy implements CollisionStrategyDecorator {
      */
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-        if (brickerGameManager.isMainBall(otherObj)) {
+        if (!((Brick) thisObj).isDeleted() && brickerGameManager.isMainBall(otherObj)) {
             brickerGameManager.enterTurboMode();
         }
         strategy.onCollision(thisObj, otherObj);

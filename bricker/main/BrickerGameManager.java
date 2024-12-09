@@ -23,6 +23,7 @@ public class BrickerGameManager extends GameManager {
     static final float WALL_WIDTH = 20;
     private Ball ball;
     private Brick[] bricks;
+    private int bricksCounter;
     private Vector2 windowDimensions;
     private WindowController windowController;
     private LifeCounter lifeCounter;
@@ -100,6 +101,7 @@ public class BrickerGameManager extends GameManager {
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
+        bricksCounter = numOfCols * numOfRows;
     }
 
     private void createLives(ImageReader imageReader) {
@@ -157,6 +159,13 @@ public class BrickerGameManager extends GameManager {
 
     private void checkForEndgame() {
         double ballHeight = this.ball.getCenter().y();
+        if (bricksCounter <= 0) {
+            String prompt = "You won! Play again?";
+            if(windowController.openYesNoDialog(prompt))
+                windowController.resetGame();
+            else
+                windowController.closeWindow();
+        }
         if (ballHeight > windowDimensions.y()) {
             if (!this.lifeCounter.loss()) {
                 gameObjects().removeGameObject(ball);
@@ -181,10 +190,6 @@ public class BrickerGameManager extends GameManager {
                 iterator.remove(); // Safely removes the current element
             }
         }
-    }
-
-    public void deleteStaticObject(GameObject object) {
-        gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
     }
 
     public void addUIObject(GameObject object) {
@@ -220,6 +225,14 @@ public class BrickerGameManager extends GameManager {
 
     public void increaseLives() {
         lifeCounter.increaseLives();
+    }
+
+    public void deleteBrick(GameObject obj) {
+        boolean ret = gameObjects().removeGameObject(obj, Layer.STATIC_OBJECTS);
+        if (ret) {
+            bricksCounter--;
+            ((Brick) obj).deleteBrick();
+        }
     }
 
 

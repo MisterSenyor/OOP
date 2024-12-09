@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
@@ -32,7 +33,7 @@ public class AnotherPaddleStrategy implements CollisionStrategyDecorator {
      */
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-        brickerGameManager.createBonusPaddle();
+        if (!((Brick) thisObj).isDeleted()) { brickerGameManager.createBonusPaddle(); }
         strategy.onCollision(thisObj, otherObj);
     }
 
