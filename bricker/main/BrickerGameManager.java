@@ -21,6 +21,9 @@ public class BrickerGameManager extends GameManager {
     private static final int BRICKS_DISTANCE = 1;
     private static final float BRICK_HEIGHT = 15;
     static final float WALL_WIDTH = 20;
+    private static final int NUM_OF_ARGS = 2;
+    private static final int ROWS_INDEX = 0;
+    private static final int COLUMN_INDEX = 1;
     private Ball ball;
     private Brick[] bricks;
     private Vector2 windowDimensions;
@@ -37,8 +40,13 @@ public class BrickerGameManager extends GameManager {
     private ImageRenderable heartImage;
     private BonusPaddle bonusPaddle;
     private boolean bonusPaddleExists;
+    private int bricksRows, bricksColumn;
 
-    public BrickerGameManager(String name, Vector2 pos) {super(name, pos);}
+    public BrickerGameManager(String name, Vector2 pos, int bricksRows, int bricksColumn) {
+        super(name, pos);
+        this.bricksRows = bricksRows;
+        this.bricksColumn = bricksColumn;
+    }
 
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader,
@@ -65,7 +73,7 @@ public class BrickerGameManager extends GameManager {
         createPucks(imageReader, soundReader);
 
         // create brick
-        createBricks(imageReader, BRICKS_ROW_DEFAULT, BRICKS_COLUMN_DEFAULT);
+        createBricks(imageReader, bricksRows, bricksColumn);
 
         // Create paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
@@ -224,9 +232,15 @@ public class BrickerGameManager extends GameManager {
 
 
     public static void main(String[] args) {
-        GameManager manager = new BrickerGameManager("Bricker", new Vector2(700, 500));
-        manager.run();
+        if (args.length == NUM_OF_ARGS) {
+            int numOfRows = Integer.parseInt(args[ROWS_INDEX]);
+            int numOfCols = Integer.parseInt(args[COLUMN_INDEX]);
+            GameManager manager = new BrickerGameManager("Bricker",
+                    new Vector2(700, 500), numOfRows, numOfCols);
+            manager.run();
+        } else if (args.length == 0) {
+            GameManager manager = new BrickerGameManager("Bricker",
+                    new Vector2(700, 500), BRICKS_ROW_DEFAULT, BRICKS_COLUMN_DEFAULT);
+        }
     }
-
-
 }
