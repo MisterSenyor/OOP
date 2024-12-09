@@ -14,8 +14,9 @@ import java.util.Random;
  */
 public class Ball extends GameObject {
     //constants of the ball default size, speed and turbo speed factor
-    static final Vector2 DEFAULT_SIZE = new Vector2(50, 50);
+    static final Vector2 DEFAULT_SIZE = new Vector2(30, 30);
     static final float BALL_SPEED = 300f;
+    private static final int TURBO_NUM_COLLISIONS = 6;
     private final float TURBO_MULTIPLIER = 1.4f;
     // the sound the ball makes while in collision
     private Sound collisionSound;
@@ -103,7 +104,7 @@ public class Ball extends GameObject {
     public void setTurboMode(Renderable renderable) {
         renderer().setRenderable(renderable);
         setVelocity(getVelocity().mult(TURBO_MULTIPLIER));
-        turboModeCollisions = 6;
+        turboModeCollisions = TURBO_NUM_COLLISIONS;
         isInTurboMode = true;
     }
 
