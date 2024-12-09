@@ -48,8 +48,8 @@ public class FallingExtraLife extends GameObject {
     }
 
     /**
-     * what to do in a collision. we check if we collided with the original Paddle and if so we disappear and
-     * increase the life.
+     * what to do in a collision. we check if we collided with the original Paddle and
+     * if so we disappear and increase the life.
      * @param other The GameObject with which a collision occurred.
      * @param collision Information regarding this collision.
      *                  A reasonable elastic behavior can be achieved with:

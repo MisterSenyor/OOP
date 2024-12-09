@@ -31,6 +31,8 @@ public class BrickerGameManager extends GameManager {
     private static final int NUM_OF_ARGS = 2;
     private static final int ROWS_INDEX = 0;
     private static final int COLUMN_INDEX = 1;
+    private static final float DEFAULT_SCREEN_SIZE_X = 700;
+    private static final float DEFAULT_SCREEN_SIZE_Y = 500;
     private final int NUM_LIVES = 3, MAX_LIVES = 4;
 
     //constant that the constructor init
@@ -140,9 +142,10 @@ public class BrickerGameManager extends GameManager {
         float brickSizeX = (windowDimensions.x()-BRICKS_DISTANCE*(numOfCols+2))/numOfCols;
         for (int i = 0; i < numOfRows; i++) {
             for (int j = 0; j < numOfCols; j++) {
-                bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) * j + BRICKS_DISTANCE,
-                        (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
-                        BRICK_HEIGHT), brickImage, strategyFactory.generateCollisionStrategy());
+                bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) *
+                        j + BRICKS_DISTANCE, (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE),
+                        new Vector2(brickSizeX, BRICK_HEIGHT), brickImage,
+                        strategyFactory.generateCollisionStrategy());
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
@@ -194,7 +197,8 @@ public class BrickerGameManager extends GameManager {
      */
     public void createBonusPaddle() {
         if (!this.bonusPaddleExists) {
-            this.bonusPaddle = new BonusPaddle(this.paddleImage, this.userInputListener, windowDimensions, this);
+            this.bonusPaddle = new BonusPaddle(this.paddleImage, this.userInputListener,
+                    windowDimensions, this);
             gameObjects().addGameObject(bonusPaddle);
             bonusPaddleExists = true;
         }
@@ -364,11 +368,12 @@ public class BrickerGameManager extends GameManager {
             int numOfRows = Integer.parseInt(args[ROWS_INDEX]);
             int numOfCols = Integer.parseInt(args[COLUMN_INDEX]);
             GameManager manager = new BrickerGameManager("Bricker",
-                    new Vector2(700, 500), numOfRows, numOfCols);
+                    new Vector2(DEFAULT_SCREEN_SIZE_X, DEFAULT_SCREEN_SIZE_Y), numOfRows, numOfCols);
             manager.run();
         } else if (args.length == 0) {
-            GameManager manager = new BrickerGameManager("Bricker",
-                    new Vector2(700, 500), BRICKS_ROW_DEFAULT, BRICKS_COLUMN_DEFAULT);
+            GameManager manager = new BrickerGameManager("Bricker", new Vector2
+                    (DEFAULT_SCREEN_SIZE_X, DEFAULT_SCREEN_SIZE_Y),
+                    BRICKS_ROW_DEFAULT, BRICKS_COLUMN_DEFAULT);
             manager.run();
         }
     }

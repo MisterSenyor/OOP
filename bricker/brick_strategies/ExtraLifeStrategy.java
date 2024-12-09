@@ -10,9 +10,9 @@ import danogl.GameObject;
  */
 public class ExtraLifeStrategy implements CollisionStrategyDecorator {
     //the other strategies we have
-    private CollisionStrategy strategy;
+    private final CollisionStrategy strategy;
     // used for the addition and creation of objects
-    private BrickerGameManager brickerGameManager;
+    private final BrickerGameManager brickerGameManager;
 
     /**
      * creates another ExtraLifeStrategy object
