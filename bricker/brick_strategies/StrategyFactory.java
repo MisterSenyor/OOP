@@ -53,7 +53,7 @@ public class StrategyFactory {
         //randomly chooses and implement the strategy
         Random random = new Random();
         int choice = random.nextInt(NUMBER_OF_STRATEGIES);
-        switch (choice) {
+        switch (TURBO_STRATEGY) {
             case DOUBLE_STRATEGY:
                 return randomlyDecorate(randomlyDecorate(strategy));
             case EXTRA_LIFE_STRATEGY:

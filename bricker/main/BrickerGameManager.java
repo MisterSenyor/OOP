@@ -113,12 +113,9 @@ public class BrickerGameManager extends GameManager {
     }
 
     private void createLives(ImageReader imageReader) {
-        //create LifeCounternew Vector2(((ImageRenderable)
-        //                     heartImage).width(), ((ImageRenderable) heartImage).height()).mult(0.2f)
         heartImage = imageReader.readImage("assets/heart.png", true);
         GameObject[] hearts = new GameObject[MAX_LIVES];
         for (int i = 0; i < MAX_LIVES; i++) {
-            // TODO const factor
              hearts[i] = new GameObject(new Vector2(WALL_WIDTH + i * FallingExtraLife.DEFAULT_SIZE.x()
                      , windowDimensions.y() - WALL_WIDTH * 2),
                      FallingExtraLife.DEFAULT_SIZE, heartImage);
@@ -254,6 +251,7 @@ public class BrickerGameManager extends GameManager {
         } else if (args.length == 0) {
             GameManager manager = new BrickerGameManager("Bricker",
                     new Vector2(700, 500), BRICKS_ROW_DEFAULT, BRICKS_COLUMN_DEFAULT);
+            manager.run();
         }
     }
 }

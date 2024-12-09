@@ -41,10 +41,17 @@ public class Brick extends GameObject {
         collisionStrategy.onCollision(this, other);
     }
 
+    /**
+     * getter function to show whether the brick has been deleted
+     * @return boolean describing if the brick has been deleted or not
+     */
     public boolean isDeleted() {
         return isDeleted;
     }
 
+    /**
+     * function to delete the brick. essentially sets isDeleted.
+     */
     public void deleteBrick() {
         isDeleted = true;
     }
