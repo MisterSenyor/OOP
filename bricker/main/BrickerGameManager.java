@@ -197,6 +197,13 @@ public class BrickerGameManager extends GameManager {
         gameObjects().addGameObject(object, Layer.BACKGROUND);
     }
 
+    public void addUIObject(GameObject object) {
+        gameObjects().addGameObject(object, Layer.UI);
+    }
+    public void deleteUIObject(GameObject object) {
+        gameObjects().removeGameObject(object, Layer.UI);
+    }
+
     public void deleteBonusPaddle() {
         gameObjects().removeGameObject(this.bonusPaddle);
         bonusPaddleExists = false;

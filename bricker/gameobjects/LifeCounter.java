@@ -37,7 +37,7 @@ public class LifeCounter {
                 numericalCountRenderable.setColor(Color.GREEN);
         }
         numericalCount = new GameObject(numericalPos, numericalSize, numericalCountRenderable);
-        brickerGameManager.addBackgroundObject(numericalCount);
+        brickerGameManager.addUIObject(numericalCount);
     }
 
     public boolean loss() {
@@ -45,8 +45,8 @@ public class LifeCounter {
             return true;
         }
         numOfLives--;
-        brickerGameManager.deleteBackgroundObject(hearts[numOfLives]);
-        brickerGameManager.deleteBackgroundObject(numericalCount);
+        brickerGameManager.deleteUIObject(hearts[numOfLives]);
+        brickerGameManager.deleteUIObject(numericalCount);
         TextRenderable numericalCountRenderable = new TextRenderable(String.valueOf(numOfLives));
         switch (numOfLives) {
             case 1:
@@ -59,7 +59,7 @@ public class LifeCounter {
                 numericalCountRenderable.setColor(Color.GREEN);
         }
         numericalCount = new GameObject(numericalPos, numericalSize, numericalCountRenderable);
-        brickerGameManager.addBackgroundObject(numericalCount);
+        brickerGameManager.addUIObject(numericalCount);
         return false;
     }
 
@@ -69,7 +69,7 @@ public class LifeCounter {
             return;
         }
         numOfLives++;
-        brickerGameManager.deleteBackgroundObject(numericalCount);
+        brickerGameManager.deleteUIObject(numericalCount);
         TextRenderable numericalCountRenderable = new TextRenderable(String.valueOf(numOfLives));
         switch (numOfLives) {
             case 1:
@@ -81,8 +81,9 @@ public class LifeCounter {
             default:
                 numericalCountRenderable.setColor(Color.GREEN);
         }
-        brickerGameManager.addBackgroundObject(numericalCount);
-        brickerGameManager.addBackgroundObject(hearts[numOfLives - 1]);
+        numericalCount = new GameObject(numericalPos, numericalSize, numericalCountRenderable);
+        brickerGameManager.addUIObject(numericalCount);
+        brickerGameManager.addUIObject(hearts[numOfLives - 1]);
     }
 
 }
