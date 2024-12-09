@@ -14,4 +14,6 @@ public class BasicCollisionStrategy implements CollisionStrategy {
     public void onCollision(GameObject thisObj, GameObject otherObj) {
         brickerGameManager.deleteStaticObject(thisObj);
     }
+
+    public int getStrategyDepth() { return 0; }
 }

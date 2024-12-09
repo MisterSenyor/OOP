@@ -1,6 +1,7 @@
 package bricker.main;
 
 import bricker.brick_strategies.ExtraLifeStrategy;
+import bricker.brick_strategies.StrategyFactory;
 import bricker.gameobjects.BonusPaddle;
 import bricker.brick_strategies.TurboStrategy;
 import bricker.gameobjects.*;
@@ -66,7 +67,7 @@ public class BrickerGameManager extends GameManager {
         createPucks(imageReader, soundReader);
 
         // create brick
-        createBricks(imageReader, 2, 1);
+        createBricks(imageReader, BRICKS_ROW_DEFAULT, BRICKS_COLUMN_DEFAULT);
 
         // Create paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
@@ -91,12 +92,13 @@ public class BrickerGameManager extends GameManager {
     private void createBricks(ImageReader imageReader, int numOfRows, int numOfCols) {
         Renderable brickImage = imageReader.readImage("assets/brick.png", true);
         bricks = new Brick[numOfRows * numOfCols];
+        StrategyFactory strategyFactory = new StrategyFactory(this);
         float brickSizeX = (windowDimensions.x()-BRICKS_DISTANCE*(numOfCols+2))/numOfCols;
         for (int i = 0; i < numOfRows; i++) {
             for (int j = 0; j < numOfCols; j++) {
                 bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) * j + BRICKS_DISTANCE,
                         (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
-                        BRICK_HEIGHT), brickImage, new ExtraLifeStrategy(this));
+                        BRICK_HEIGHT), brickImage, strategyFactory.generateCollisionStrategy());
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
@@ -214,7 +216,7 @@ public class BrickerGameManager extends GameManager {
 
     public void addExtraLife(Vector2 center) {
         Vector2 topLeftCorner = new Vector2(center.x() - heartImage.width() / 2, center.y());
-        FallingExtraLife heart = new FallingExtraLife(topLeftCorner, new Vector2(heartImage.width(), heartImage.height()),
+        FallingExtraLife heart = new FallingExtraLife(topLeftCorner, FallingExtraLife.DEFAULT_SIZE,
                 heartImage, this);
         gameObjects().addGameObject(heart);
     }
