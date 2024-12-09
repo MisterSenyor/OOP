@@ -3,6 +3,9 @@ package bricker.brick_strategies;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
+/**
+ *
+ */
 public class AnotherPaddleStrategy implements CollisionStrategyDecorator {
     private CollisionStrategy strategy;
     private BrickerGameManager brickerGameManager;
