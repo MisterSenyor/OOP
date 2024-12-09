@@ -2,7 +2,6 @@ package bricker.gameobjects;
 
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
-import danogl.gui.rendering.Renderable;
 import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
 
@@ -19,7 +18,6 @@ public class LifeCounter {
     public LifeCounter(int numOfLives,int maxLives, GameObject[] hearts, BrickerGameManager brickerGameManager, Vector2 numericalPos,
                        Vector2 numericalSize) {
         this.numOfLives = numOfLives;
-        this.numericalLifeCount = numericalLifeCount;
         this.hearts = hearts;
         this.maxLives = maxLives;
         this.brickerGameManager = brickerGameManager;

@@ -1,9 +1,7 @@
 package bricker.main;
 
-import bricker.brick_strategies.ExtraLifeStrategy;
 import bricker.brick_strategies.StrategyFactory;
 import bricker.gameobjects.BonusPaddle;
-import bricker.brick_strategies.TurboStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -22,7 +20,7 @@ public class BrickerGameManager extends GameManager {
     private static final int BRICKS_COLUMN_DEFAULT = 8;
     private static final int BRICKS_DISTANCE = 1;
     private static final float BRICK_HEIGHT = 15;
-    static final int WALL_WIDTH = 20;
+    static final float WALL_WIDTH = 20;
     private Ball ball;
     private Brick[] bricks;
     private Vector2 windowDimensions;
@@ -108,14 +106,14 @@ public class BrickerGameManager extends GameManager {
         //create LifeCounternew Vector2(((ImageRenderable)
         //                     heartImage).width(), ((ImageRenderable) heartImage).height()).mult(0.2f)
         heartImage = imageReader.readImage("assets/heart.png", true);
-        GameObject hearts[] = new GameObject[MAX_LIVES];
+        GameObject[] hearts = new GameObject[MAX_LIVES];
         for (int i = 0; i < MAX_LIVES; i++) {
             // TODO const factor
              hearts[i] = new GameObject(new Vector2(WALL_WIDTH + i * FallingExtraLife.DEFAULT_SIZE.x()
                      , windowDimensions.y() - WALL_WIDTH * 2),
                      FallingExtraLife.DEFAULT_SIZE, heartImage);
              if (i < NUM_LIVES) {
-                 gameObjects().addGameObject(hearts[i], Layer.BACKGROUND);
+                 gameObjects().addGameObject(hearts[i], Layer.UI);
              }
         }
         lifeCounter=new LifeCounter(NUM_LIVES, MAX_LIVES, hearts,
@@ -130,7 +128,7 @@ public class BrickerGameManager extends GameManager {
     }
 
     private void createPucks(ImageReader imageReader, SoundReader soundReader) {
-        this.puckList = new LinkedList<Puck>();
+        this.puckList = new LinkedList<>();
         this.puckImage = imageReader.readImage("assets/mockBall.png", true);
         this.puckSound = soundReader.readSound("assets/blop.wav");
     }
@@ -189,14 +187,6 @@ public class BrickerGameManager extends GameManager {
         gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
     }
 
-    public void deleteBackgroundObject(GameObject object) {
-        gameObjects().removeGameObject(object, Layer.BACKGROUND);
-    }
-
-    public void addBackgroundObject(GameObject object) {
-        gameObjects().addGameObject(object, Layer.BACKGROUND);
-    }
-
     public void addUIObject(GameObject object) {
         gameObjects().addGameObject(object, Layer.UI);
     }
@@ -222,7 +212,7 @@ public class BrickerGameManager extends GameManager {
     }
 
     public void addExtraLife(Vector2 center) {
-        Vector2 topLeftCorner = new Vector2(center.x() - heartImage.width() / 2, center.y());
+        Vector2 topLeftCorner = new Vector2(center.x() - (float) heartImage.width() / 2, center.y());
         FallingExtraLife heart = new FallingExtraLife(topLeftCorner, FallingExtraLife.DEFAULT_SIZE,
                 heartImage, this);
         gameObjects().addGameObject(heart);
