@@ -42,6 +42,7 @@ public class Ball extends GameObject {
         this.collisionSound = collisionSound;
         this.collisionCounter = 0;
         this.renderable = renderable;
+        //the ball is generated at one of 4 45 degrees angles
         float ballVelX = BALL_SPEED, ballVelY = BALL_SPEED;
         Random random = new Random();
         if (random.nextBoolean()) {
