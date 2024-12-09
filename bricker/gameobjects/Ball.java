@@ -18,13 +18,13 @@ public class Ball extends GameObject {
     private static final int TURBO_NUM_COLLISIONS = 6;
     private final float TURBO_MULTIPLIER = 1.4f;
     // the sound the ball makes while in collision
-    private Sound collisionSound;
+    private final Sound collisionSound;
     // counts the number of collision in normal and turbo mode
     private int collisionCounter, turboModeCollisions;
     // keeps track on turbo and normal mode
     private boolean isInTurboMode = false;
     // the image of the ball
-    private Renderable renderable;
+    private final Renderable renderable;
 
 
     /**

@@ -18,7 +18,7 @@ public class BonusPaddle extends Paddle {
     //the number of hits it can take
     private static final int DEFAULT_HIT_LEFT = 4;
     // an instance of game manager, used for deletion and so on.
-    private BrickerGameManager brickerGameManager;
+    private final BrickerGameManager brickerGameManager;
 
     /**
      * Construct a new BonusPaddle instance.
@@ -29,7 +29,8 @@ public class BonusPaddle extends Paddle {
      * @param windowDimensions the dimensions of the game window
      * @param brickerGameManager the bricker game manager where we want to add the paddle
      */
-    public BonusPaddle(Renderable renderable, UserInputListener inputListener, Vector2 windowDimensions, BrickerGameManager brickerGameManager) {
+    public BonusPaddle(Renderable renderable, UserInputListener inputListener, Vector2 windowDimensions,
+                       BrickerGameManager brickerGameManager) {
         super(Vector2.ZERO, renderable, inputListener, windowDimensions);
         this.brickerGameManager = brickerGameManager;
         this.setCenter(new Vector2(windowDimensions.x()/2, windowDimensions.y()/2));

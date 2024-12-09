@@ -5,8 +5,6 @@ import danogl.collisions.*;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
-import java.util.Random;
-
 /**
  * the falling heart that one of the strategies generates.
  * @author Ido Minha
@@ -16,7 +14,7 @@ public class FallingExtraLife extends GameObject {
     public static final Vector2 DEFAULT_SIZE = new Vector2(25, 25);
     static final Vector2 DEFAULT_VELOCITY = Vector2.DOWN.mult(30f);
     // the game manager used to delete the object from game ones it was touched
-    private BrickerGameManager brickerGameManager;
+    private final BrickerGameManager brickerGameManager;
 
 
     /**

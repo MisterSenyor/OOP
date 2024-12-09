@@ -11,7 +11,7 @@ import danogl.util.Vector2;
  * @author Tomer Zilberman
  */
 public class Brick extends GameObject {
-    private CollisionStrategy collisionStrategy;
+    private final CollisionStrategy collisionStrategy;
     private boolean isDeleted = false;
     /**
      * Construct a new Brick instance.

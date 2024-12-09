@@ -11,9 +11,9 @@ import danogl.GameObject;
  */
 public class AnotherPaddleStrategy implements CollisionStrategyDecorator {
     // the strategy it uses to delete the brick
-    private CollisionStrategy strategy;
+    private final CollisionStrategy strategy;
     // an instance of game brick manager to handle game objects
-    private BrickerGameManager brickerGameManager;
+    private final BrickerGameManager brickerGameManager;
 
 
     /**
