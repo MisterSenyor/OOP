@@ -11,6 +11,8 @@ import danogl.gui.*;
 import danogl.gui.rendering.ImageRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
+
+import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -237,7 +239,8 @@ public class BrickerGameManager extends GameManager {
     private void checkForEndgame() {
         double ballHeight = this.ball.getCenter().y();
         //check win
-        if (bricksCounter <= 0) {
+
+        if (userInputListener.isKeyPressed(KeyEvent.VK_W) || bricksCounter <= 0) {
             String prompt = "You won! Play again?";
             if(windowController.openYesNoDialog(prompt))
                 windowController.resetGame();
