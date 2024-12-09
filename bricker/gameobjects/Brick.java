@@ -8,7 +8,7 @@ import danogl.util.Vector2;
 
 public class Brick extends GameObject {
     private CollisionStrategy collisionStrategy;
-
+    private static int brickCounter = 0;
     /**
      * Construct a new GameObject instance.
      *
@@ -21,6 +21,7 @@ public class Brick extends GameObject {
     public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, CollisionStrategy collisionStrategy) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionStrategy = collisionStrategy;
+        brickCounter++;
     }
 
     @Override

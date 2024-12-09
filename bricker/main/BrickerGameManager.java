@@ -1,6 +1,8 @@
 package bricker.main;
 
 import bricker.brick_strategies.BasicCollisionStrategy;
+import bricker.brick_strategies.BonusPaddle;
+import bricker.brick_strategies.PucksStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -9,7 +11,6 @@ import danogl.components.CoordinateSpace;
 import danogl.gui.*;
 import danogl.gui.rendering.ImageRenderable;
 import danogl.gui.rendering.Renderable;
-import danogl.gui.rendering.TextRenderable;
 import danogl.util.Vector2;
 
 import java.util.Iterator;
@@ -63,10 +64,7 @@ public class BrickerGameManager extends GameManager {
         createPucks(imageReader, soundReader);
 
         // create brick
-        createBricks(imageReader, 7, 8);
-
-        //create LifeCounter
-        lifeCounter=new LifeCounter(3, null, null);
+        createBricks(imageReader, 2, 1);
 
         // Create paddle
         Renderable paddleImage = imageReader.readImage("assets/paddle.png", true);
@@ -96,7 +94,7 @@ public class BrickerGameManager extends GameManager {
             for (int j = 0; j < numOfCols; j++) {
                 bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) * j + BRICKS_DISTANCE,
                         (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
-                        BRICK_HEIGHT), brickImage, new anotherPaddleStrategy(this));
+                        BRICK_HEIGHT), brickImage, new PucksStrategy(this));
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
@@ -105,9 +103,6 @@ public class BrickerGameManager extends GameManager {
     private void createLives(ImageReader imageReader) {
         //create LifeCounter
         Renderable heartImage = imageReader.readImage("assets/heart.png", true);
-        Renderable numericalCountRenderable = new TextRenderable(String.valueOf(NUM_LIVES));
-        GameObject numericalCount = new GameObject(new Vector2(WALL_WIDTH, WALL_WIDTH),
-                new Vector2(WALL_WIDTH, WALL_WIDTH * 2), numericalCountRenderable);
         GameObject hearts[] = new GameObject[NUM_LIVES];
         for (int i = 0; i < MAX_LIVES; i++) {
             // TODO const factor
@@ -116,8 +111,9 @@ public class BrickerGameManager extends GameManager {
                      heartImage).width(), ((ImageRenderable) heartImage).height()).mult(0.2f), heartImage);
             gameObjects().addGameObject(hearts[i], Layer.BACKGROUND);
         }
-        gameObjects().addGameObject(numericalCount, Layer.STATIC_OBJECTS);
-        lifeCounter=new LifeCounter(NUM_LIVES, MAX_LIVES, hearts, numericalCount, this);
+        lifeCounter=new LifeCounter(NUM_LIVES, MAX_LIVES, hearts,
+                this, new Vector2(WALL_WIDTH, WALL_WIDTH),
+                new Vector2(WALL_WIDTH, WALL_WIDTH * 2));
     }
 
     private void createBall() {
@@ -188,6 +184,10 @@ public class BrickerGameManager extends GameManager {
 
     public void deleteBackgroundObject(GameObject object) {
         gameObjects().removeGameObject(object, Layer.BACKGROUND);
+    }
+
+    public void addBackgroundObject(GameObject object) {
+        gameObjects().addGameObject(object, Layer.BACKGROUND);
     }
 
     public void deleteBonusPaddle() {

@@ -50,7 +50,13 @@ public class Ball extends GameObject {
         collisionCounter++;
     }
 
-    public int getCollisionCounter() {
-        return collisionCounter;
+    public void setTurboMode() {
+//        Renderable
+//        this.renderer().setRenderable();
     }
+
+    public void setNormalMode() {
+
+    }
+
 }
