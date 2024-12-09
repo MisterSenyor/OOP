@@ -10,8 +10,12 @@ import java.util.Random;
 public class Ball extends GameObject {
     static final Vector2 DEFAULT_SIZE = new Vector2(50, 50);
     static final float BALL_SPEED = 300f;
+    private final float TURBO_MULTIPLIER = 1.4f;
     private Sound collisionSound;
-    int collisionCounter;
+    private int collisionCounter, turboModeCollisions;
+    private boolean isInTurboMode = false;
+    private Renderable renderable;
+
 
     /**
      * Construct a new GameObject instance.
@@ -26,6 +30,7 @@ public class Ball extends GameObject {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
         this.collisionCounter = 0;
+        this.renderable = renderable;
         float ballVelX = BALL_SPEED, ballVelY = BALL_SPEED;
         Random random = new Random();
         if (random.nextBoolean()) {
@@ -48,15 +53,29 @@ public class Ball extends GameObject {
         setVelocity(newVel);
         collisionSound.play();
         collisionCounter++;
+        if (isInTurboMode) {
+            if (--turboModeCollisions == 0) {
+                setNormalMode();
+            }
+        }
     }
 
-    public void setTurboMode() {
-//        Renderable
-//        this.renderer().setRenderable();
+
+    public int getCollisionCounter() {
+        return collisionCounter;
+    }
+
+    public void setTurboMode(Renderable renderable) {
+        renderer().setRenderable(renderable);
+        setVelocity(getVelocity().mult(TURBO_MULTIPLIER));
+        turboModeCollisions = 6;
+        isInTurboMode = true;
     }
 
     public void setNormalMode() {
-
+        renderer().setRenderable(renderable);
+        setVelocity(getVelocity().mult(1 / TURBO_MULTIPLIER));
+        isInTurboMode = false;
     }
 
 }

@@ -1,8 +1,8 @@
 package bricker.main;
 
-import bricker.brick_strategies.BasicCollisionStrategy;
-import bricker.brick_strategies.BonusPaddle;
-import bricker.brick_strategies.PucksStrategy;
+import bricker.brick_strategies.ExtraLifeStrategy;
+import bricker.gameobjects.BonusPaddle;
+import bricker.brick_strategies.TurboStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -28,13 +28,14 @@ public class BrickerGameManager extends GameManager {
     private WindowController windowController;
     private LifeCounter lifeCounter;
     private LinkedList<Puck> puckList;
-    private Renderable puckImage;
+    private ImageRenderable puckImage;
     private UserInputListener userInputListener;
     private Sound puckSound;
-    private final int NUM_LIVES = 3, MAX_LIVES = 3;
-    private Renderable ballImage;
+    private final int NUM_LIVES = 3, MAX_LIVES = 4;
+    private ImageRenderable ballNormalImage, ballTurboImage;
     private Sound collisionSound;
-    private Renderable paddleImage;
+    private ImageRenderable paddleImage;
+    private ImageRenderable heartImage;
     private BonusPaddle bonusPaddle;
     private boolean bonusPaddleExists;
 
@@ -56,7 +57,8 @@ public class BrickerGameManager extends GameManager {
         gameObjects().addGameObject(bg, Layer.BACKGROUND);
 
         // Create ball
-        ballImage = imageReader.readImage("assets/ball.png", true);
+        ballNormalImage = imageReader.readImage("assets/ball.png", true);
+        ballTurboImage = imageReader.readImage("assets/redball.png", true);
         collisionSound = soundReader.readSound("assets/blop.wav");
         createBall();
 
@@ -94,22 +96,25 @@ public class BrickerGameManager extends GameManager {
             for (int j = 0; j < numOfCols; j++) {
                 bricks[i*numOfCols + j] = new Brick(new Vector2((brickSizeX+BRICKS_DISTANCE) * j + BRICKS_DISTANCE,
                         (BRICK_HEIGHT+BRICKS_DISTANCE) * i + BRICKS_DISTANCE), new Vector2(brickSizeX,
-                        BRICK_HEIGHT), brickImage, new PucksStrategy(this));
+                        BRICK_HEIGHT), brickImage, new ExtraLifeStrategy(this));
                 gameObjects().addGameObject(bricks[i*numOfCols + j], Layer.STATIC_OBJECTS);
             }
         }
     }
 
     private void createLives(ImageReader imageReader) {
-        //create LifeCounter
-        Renderable heartImage = imageReader.readImage("assets/heart.png", true);
-        GameObject hearts[] = new GameObject[NUM_LIVES];
+        //create LifeCounternew Vector2(((ImageRenderable)
+        //                     heartImage).width(), ((ImageRenderable) heartImage).height()).mult(0.2f)
+        heartImage = imageReader.readImage("assets/heart.png", true);
+        GameObject hearts[] = new GameObject[MAX_LIVES];
         for (int i = 0; i < MAX_LIVES; i++) {
             // TODO const factor
-             hearts[i] = new GameObject(new Vector2(WALL_WIDTH + i * ((ImageRenderable)
-                    heartImage).width() * 0.2f, windowDimensions.y() - WALL_WIDTH * 2), new Vector2(((ImageRenderable)
-                     heartImage).width(), ((ImageRenderable) heartImage).height()).mult(0.2f), heartImage);
-            gameObjects().addGameObject(hearts[i], Layer.BACKGROUND);
+             hearts[i] = new GameObject(new Vector2(WALL_WIDTH + i * FallingExtraLife.DEFAULT_SIZE.x()
+                     , windowDimensions.y() - WALL_WIDTH * 2),
+                     FallingExtraLife.DEFAULT_SIZE, heartImage);
+             if (i < NUM_LIVES) {
+                 gameObjects().addGameObject(hearts[i], Layer.BACKGROUND);
+             }
         }
         lifeCounter=new LifeCounter(NUM_LIVES, MAX_LIVES, hearts,
                 this, new Vector2(WALL_WIDTH, WALL_WIDTH),
@@ -117,7 +122,7 @@ public class BrickerGameManager extends GameManager {
     }
 
     private void createBall() {
-        ball = new Ball(Vector2.ZERO, ballImage, collisionSound);
+        ball = new Ball(Vector2.ZERO, ballNormalImage, collisionSound);
         ball.setCenter(this.windowDimensions.mult(0.5f));
         gameObjects().addGameObject(ball);
     }
@@ -193,6 +198,29 @@ public class BrickerGameManager extends GameManager {
     public void deleteBonusPaddle() {
         gameObjects().removeGameObject(this.bonusPaddle);
         bonusPaddleExists = false;
+    }
+
+    public void deleteObject(GameObject object) {
+        gameObjects().removeGameObject(object);
+    }
+
+    public boolean isMainBall(GameObject ball) {
+        return ball == this.ball;
+    }
+
+    public void enterTurboMode() {
+        ball.setTurboMode(ballTurboImage);
+    }
+
+    public void addExtraLife(Vector2 center) {
+        Vector2 topLeftCorner = new Vector2(center.x() - heartImage.width() / 2, center.y());
+        FallingExtraLife heart = new FallingExtraLife(topLeftCorner, new Vector2(heartImage.width(), heartImage.height()),
+                heartImage, this);
+        gameObjects().addGameObject(heart);
+    }
+
+    public void increaseLives() {
+        lifeCounter.increaseLives();
     }
 
 

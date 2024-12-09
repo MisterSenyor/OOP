@@ -1,6 +1,5 @@
-package bricker.brick_strategies;
+package bricker.gameobjects;
 
-import bricker.gameobjects.Paddle;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 import danogl.collisions.Collision;

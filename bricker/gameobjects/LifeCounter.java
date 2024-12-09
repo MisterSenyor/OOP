@@ -63,4 +63,26 @@ public class LifeCounter {
         return false;
     }
 
+    public void increaseLives() {
+        if (numOfLives >= maxLives) {
+            numOfLives = maxLives;
+            return;
+        }
+        numOfLives++;
+        brickerGameManager.deleteBackgroundObject(numericalCount);
+        TextRenderable numericalCountRenderable = new TextRenderable(String.valueOf(numOfLives));
+        switch (numOfLives) {
+            case 1:
+                numericalCountRenderable.setColor(Color.RED);
+                break;
+            case 2:
+                numericalCountRenderable.setColor(Color.YELLOW);
+                break;
+            default:
+                numericalCountRenderable.setColor(Color.GREEN);
+        }
+        brickerGameManager.addBackgroundObject(numericalCount);
+        brickerGameManager.addBackgroundObject(hearts[numOfLives - 1]);
+    }
+
 }
